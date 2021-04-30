@@ -27,10 +27,10 @@ namespace Hinto.API.Controllers
             _mapper = mapper;
         }
 
-        [Route("recommendation/:id")]
+        [Route("recommendation/{id}")]
         [HttpGet]
-        public AIRecommendationViewModel Recommendations(long userId) {
-            return _mapper.Map<AIRecommendationViewModel>(_hintoAIDomain.Recommendations(userId));
+        public AIRecommendationViewModel Recommendations(long id) {
+            return _mapper.Map<AIRecommendationViewModel>(_hintoAIDomain.Recommendations(id));
         }
     }
 }
