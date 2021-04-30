@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hinto.API", "Hinto.API\Hinto.API.csproj", "{A8C0B845-844B-4571-AEA8-4CC71344F44E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hinto.Domain", "Hinto.Domain\Hinto.Domain.csproj", "{E8CC65BC-171C-4894-BA5C-AE6BB3550DFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hinto.Common", "Hinto.Common\Hinto.Common.csproj", "{32C8770B-73BE-4E5F-B5F7-DA9E019CAFC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hinto.Entity", "Hinto.Entity\Hinto.Entity.csproj", "{254AE5E2-0509-47EB-A17F-46FF4505FD30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hinto.Model", "Hinto.Model\Hinto.Model.csproj", "{7D3238CD-5D67-474D-8E88-027EED6B6256}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hinto.IoC", "Hinto.IoC\Hinto.IoC.csproj", "{353DD619-855D-4B8F-9694-45B7CFF1B9C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8C0B845-844B-4571-AEA8-4CC71344F44E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8C0B845-844B-4571-AEA8-4CC71344F44E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8C0B845-844B-4571-AEA8-4CC71344F44E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8C0B845-844B-4571-AEA8-4CC71344F44E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CC65BC-171C-4894-BA5C-AE6BB3550DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8CC65BC-171C-4894-BA5C-AE6BB3550DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8CC65BC-171C-4894-BA5C-AE6BB3550DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8CC65BC-171C-4894-BA5C-AE6BB3550DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32C8770B-73BE-4E5F-B5F7-DA9E019CAFC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C8770B-73BE-4E5F-B5F7-DA9E019CAFC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C8770B-73BE-4E5F-B5F7-DA9E019CAFC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C8770B-73BE-4E5F-B5F7-DA9E019CAFC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{254AE5E2-0509-47EB-A17F-46FF4505FD30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{254AE5E2-0509-47EB-A17F-46FF4505FD30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{254AE5E2-0509-47EB-A17F-46FF4505FD30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{254AE5E2-0509-47EB-A17F-46FF4505FD30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3238CD-5D67-474D-8E88-027EED6B6256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3238CD-5D67-474D-8E88-027EED6B6256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3238CD-5D67-474D-8E88-027EED6B6256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3238CD-5D67-474D-8E88-027EED6B6256}.Release|Any CPU.Build.0 = Release|Any CPU
+		{353DD619-855D-4B8F-9694-45B7CFF1B9C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{353DD619-855D-4B8F-9694-45B7CFF1B9C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{353DD619-855D-4B8F-9694-45B7CFF1B9C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{353DD619-855D-4B8F-9694-45B7CFF1B9C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B31B6B0-919E-414D-9925-CCA51B895368}
+	EndGlobalSection
+EndGlobal
