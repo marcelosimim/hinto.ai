@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hinto.Common\Hinto.Common.csproj" />
+    <ProjectReference Include="..\Hinto.Entity\Hinto.Entity.csproj" />
+    <ProjectReference Include="..\Hinto.Model\Hinto.Model.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using Hinto.Domain.Contract;
 using Hinto.Domain.VO;
+using Hinto.Entity.Hinto.Model;
+using Hinto.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +10,16 @@ namespace Hinto.Domain.Service
 {
     public class HintoAIDomain : IHintoAIDomain
     {
+        private HintoContext _dbContext;
+        public HintoAIDomain()
+        {
+            _dbContext = new HintoContext();
+        }
+
+
         public AIRecommendationVO Recommendations(long idUsuario)
         {
-            var usuario = GetUsersMock().SingleOrDefault(x => x.Id == idUsuario);
+            var usuario = _dbContext.Usuarios.SingleOrDefault(x => x.Id == idUsuario);
 
             if (usuario == null)
                 throw new Exception("Usuário não encontrado.");
@@ -19,28 +28,93 @@ namespace Hinto.Domain.Service
             return new AIRecommendationVO { IdMidias = IAProcessRecommend(usuario) };
         }
 
-        private List<long> IAProcessRecommend(UsuarioVO usuario)
+        private List<long> IAProcessRecommend(Usuario usuario)
         {
-            var interessesUsuario = GetListaInteresseMock().SingleOrDefault(x => x.Usuario.Id == usuario.Id);
-
-            //Se ele nao adicionou nada a lista, recomenda os tops.
-            if (interessesUsuario.Midias.Count() == 0)
-                return GetMidiasMock().Select(x => x.Id).ToList();
+            //QUERY FINAL - buscar lista de interesses do usuario
+            var interessesUsuarioQuery = _dbContext.ListaInteresses.Where(x => x.UsuarioId == usuario.Id).ToList();
+            var listaInteresseMidiaQuery = _dbContext.ListaInteresseMidias.ToList();
 
 
-            var midiasids = new List<long>();
-            //Por genero
-            midiasids.AddRange(
-                    GetMidiasMock().Where(x => x.Generos.Any(c => interessesUsuario.Midias.Any(z => z.Generos.Any(v => v.Descricao.Equals(c.Descricao))))).Select(x => x.Id)
-                );
-            //Por Ator
-            midiasids.AddRange(
-                   GetMidiasMock().Where(x => x.Artistas.Any(c => interessesUsuario.Midias.Any(z => z.Artistas.Any(v => v.Id == c.Id)))).Select(x => x.Id)
-               );
+            var interessesUsuario = interessesUsuarioQuery.ToList();
+            var listaInteresseMidia = listaInteresseMidiaQuery.ToList();
 
 
-            return midiasids;
+            var midiasInteressadas = listaInteresseMidia.ToList().Where(x => interessesUsuario.Any(c => c.Id == x.ListaInteresseId)).Select(x => x.MidiasId).ToList();
 
+            //Se ele nao adicionou nada a lista, recomenda os tops
+            if (midiasInteressadas.Count() == 0)
+            {
+                return GetTopMidias();
+            }
+
+
+            //Pega os generos favoritos dele
+            //QUERY FINAL - Buscar MidiasGeneros nas midias interessadas
+            var generosFavoritosQuery = _dbContext.MidiaGeneros
+                                .Where(x => midiasInteressadas
+                                .Any(c => c == x.MidiaId))
+                                .GroupBy(x => x.GenerosId)
+                                .OrderByDescending(x => x.Count())
+                                .Select(x => x.Key);
+
+            var generosFavoritos = generosFavoritosQuery.ToList();
+
+            //Aqui vai ser PUNK, dado uma lista de ids de generos, buscar filmes que tem as maiores similaridades de genero.
+
+            var recomendacoes = BuscarMidiasGenerosSimilares(generosFavoritos, midiasInteressadas);
+
+            return recomendacoes;
+
+        }
+
+        private List<long> BuscarMidiasGenerosSimilares(List<long> generosFavoritos, List<long> midiasIgnoradas)
+        {
+
+            var listaMidiasPontos = new List<MidiaSimilarVO>();
+
+            
+            //QUERY - Pega todos que exceto os que ele ja viu.
+            var listaMidiasQuery = _dbContext.Midia.Where(x => !midiasIgnoradas.Contains(x.Id));
+
+            var listaMidiaGenerosQuery = _dbContext.MidiaGeneros;
+
+
+            var listaMidias = listaMidiasQuery.ToList();
+
+            var listaMidiaGeneros = listaMidiaGenerosQuery.ToList();
+
+            var listaDeMidiasGenerosBanco = listaMidias.Select(x => new MidiaGeneroProjectionVO{ 
+                MidiaId = x.Id,
+                GenerosId = listaMidiaGeneros.Where(c => c.MidiaId == x.Id).Select(c => c.GenerosId).ToList()
+            });
+
+            foreach (var midiaGeneroBD in listaDeMidiasGenerosBanco) {
+                var baseFavoritos =  generosFavoritos.Count();
+
+                var quantidadeSimilaridade = generosFavoritos.Count(x => midiaGeneroBD.GenerosId.Contains(x));
+
+                var calculoResultante = quantidadeSimilaridade * 100 / (double)baseFavoritos;
+
+                listaMidiasPontos.Add(new MidiaSimilarVO { 
+                    MidiaId = midiaGeneroBD.MidiaId,
+                    Similarity = calculoResultante
+                });
+            }
+
+            var filtradoOrdenado = listaMidiasPontos.OrderByDescending(x => x.Similarity).Where(x => x.Similarity > 10);
+
+            return filtradoOrdenado.Select(x => x.MidiaId).ToList();
+        }
+
+        private List<long> GetTopMidias(int amount = 10) {
+            var listaInteresses = _dbContext.ListaInteresseMidias;
+
+
+            //QUERY FINAL - Busca midias top geral
+            var queryTopMidias = listaInteresses.GroupBy(x => x.MidiasId).OrderByDescending(x => x.Count()).Take(amount).Select(x => x.Key);
+
+            return queryTopMidias.ToList();
+        
         }
 
         private List<MidiaVO> GetMidiasMock() {
