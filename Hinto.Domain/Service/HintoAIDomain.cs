@@ -1,6 +1,7 @@
-﻿using Hinto.Domain.Contract;
+﻿using Hinto.Common.Enum;
+using Hinto.Domain.Contract;
 using Hinto.Domain.VO;
-using Hinto.Entity.Hinto.Model;
+using Hinto.Entity;
 using Hinto.Model;
 using System;
 using System.Collections.Generic;
@@ -52,22 +53,33 @@ namespace Hinto.Domain.Service
             //QUERY FINAL - Buscar MidiasGeneros nas midias interessadas
             var generosFavoritosQuery = _dbContext.MidiaGeneros
                                 .Where(x => midiasInteressadas
-                                .Any(c => c == x.MidiaId))
+                                    .Any(c => c == x.MidiaId))
                                 .GroupBy(x => x.GenerosId)
                                 .OrderByDescending(x => x.Count())
+                                .Take(10)
                                 .Select(x => x.Key);
 
             var generosFavoritos = generosFavoritosQuery.ToList();
 
+            var produtoresFavoritosQuery = _dbContext.MidiaProdutores
+                                .Where(x => midiasInteressadas
+                                            .Any(c => c == x.MidiaId))
+                                .GroupBy(x => x.ProdutoresId)
+                                .OrderByDescending(x => x.Count())
+                                .Take(10)
+                                .Select(x => x.Key);
+
+            var produtoresFavoritos = produtoresFavoritosQuery.ToList();
+
             //Aqui vai ser PUNK, dado uma lista de ids de generos, buscar filmes que tem as maiores similaridades de genero.
 
-            var recomendacoes = BuscarMidiasGenerosSimilares(generosFavoritos, midiasInteressadas);
+            var recomendacoes = BuscarMidiasGenerosSimilares(generosFavoritos, midiasInteressadas, produtoresFavoritos);
 
             return recomendacoes;
 
         }
 
-        private List<long> BuscarMidiasGenerosSimilares(List<long> generosFavoritos, List<long> midiasIgnoradas)
+        private List<long> BuscarMidiasGenerosSimilares(List<long> generosFavoritos, List<long> midiasIgnoradas, List<long> produtoresFavoritos)
         {
 
             var listaMidiasPontos = new List<MidiaSimilarVO>();
@@ -78,14 +90,23 @@ namespace Hinto.Domain.Service
 
             var listaMidiaGenerosQuery = _dbContext.MidiaGeneros;
 
+            var listaProdutoresQUery = _dbContext.MidiaProdutores;
 
             var listaMidias = listaMidiasQuery.ToList();
 
             var listaMidiaGeneros = listaMidiaGenerosQuery.ToList();
 
+            var listaProdutores = listaProdutoresQUery.ToList();
+
             var listaDeMidiasGenerosBanco = listaMidias.Select(x => new MidiaGeneroProjectionVO{ 
                 MidiaId = x.Id,
                 GenerosId = listaMidiaGeneros.Where(c => c.MidiaId == x.Id).Select(c => c.GenerosId).ToList()
+            });
+
+            var listaDeMidiaProdutoresBanco = listaMidias.Select(x => new MidiaProdutoreProjectionVO
+            {
+                MidiaId = x.Id,
+                Produtores = listaProdutores.Where(c => c.MidiaId == x.Id).Select(c => c.ProdutoresId).ToList()
             });
 
             foreach (var midiaGeneroBD in listaDeMidiasGenerosBanco) {
@@ -97,11 +118,28 @@ namespace Hinto.Domain.Service
 
                 listaMidiasPontos.Add(new MidiaSimilarVO { 
                     MidiaId = midiaGeneroBD.MidiaId,
-                    Similarity = calculoResultante
+                    Similarity = calculoResultante,
+                    RecomendationType = RecomendationType.Genero
                 });
             }
 
-            var filtradoOrdenado = listaMidiasPontos.OrderByDescending(x => x.Similarity).Where(x => x.Similarity > 10);
+            foreach (var midiaGeneroBD in listaDeMidiaProdutoresBanco)
+            {
+                var baseFavoritos = produtoresFavoritos.Count();
+
+                var quantidadeSimilaridade = produtoresFavoritos.Count(x => midiaGeneroBD.Produtores.Contains(x));
+
+                var calculoResultante = quantidadeSimilaridade * 100 / (double)baseFavoritos;
+
+                listaMidiasPontos.Add(new MidiaSimilarVO
+                {
+                    MidiaId = midiaGeneroBD.MidiaId,
+                    Similarity = calculoResultante,
+                    RecomendationType = RecomendationType.Produtor
+                });
+            }
+
+            var filtradoOrdenado = listaMidiasPontos.OrderByDescending(x => x.Similarity).Where(x => x.Similarity > 40);
 
             return filtradoOrdenado.Select(x => x.MidiaId).ToList();
         }

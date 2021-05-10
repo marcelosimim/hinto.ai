@@ -1,11 +1,7 @@
-﻿using System;
-using Hinto.Model;
+﻿using Hinto.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
-#nullable disable
-
-namespace Hinto.Entity.Hinto.Model
+namespace Hinto.Entity
 {
     public partial class HintoContext : DbContext
     {
@@ -24,14 +20,16 @@ namespace Hinto.Entity.Hinto.Model
         public virtual DbSet<ListaInteresseMidia> ListaInteresseMidias { get; set; }
         public virtual DbSet<MidiaArtista> MidiaArtistas { get; set; }
         public virtual DbSet<MidiaGenero> MidiaGeneros { get; set; }
+        public virtual DbSet<MidiaProdutore> MidiaProdutores { get; set; }
         public virtual DbSet<Midium> Midia { get; set; }
+        public virtual DbSet<Produtore> Produtores { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-               optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Hinto;User=hinto;Password=hintoadmin;");
+                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Hinto;User=hinto;Password=hintoadmin;");
             }
         }
 
@@ -169,6 +167,29 @@ namespace Hinto.Entity.Hinto.Model
                     .HasConstraintName("FKf3xgubqeroq6owfyo75rledre");
             });
 
+            modelBuilder.Entity<MidiaProdutore>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("midia_produtores");
+
+                entity.Property(e => e.MidiaId).HasColumnName("midia_id");
+
+                entity.Property(e => e.ProdutoresId).HasColumnName("produtores_id");
+
+                entity.HasOne(d => d.Midia)
+                    .WithMany()
+                    .HasForeignKey(d => d.MidiaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKc12c4casnbjo88w7csr3s0vr5");
+
+                entity.HasOne(d => d.Produtores)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProdutoresId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKoxe6un3shromfy0enovuxlt7f");
+            });
+
             modelBuilder.Entity<Midium>(entity =>
             {
                 entity.ToTable("midia");
@@ -198,6 +219,21 @@ namespace Hinto.Entity.Hinto.Model
                     .HasMaxLength(125)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
+            });
+
+            modelBuilder.Entity<Produtore>(entity =>
+            {
+                entity.ToTable("produtores");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Nome)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("nome");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
