@@ -28,5 +28,11 @@ namespace Hinto.API.Controllers
         public object Recommendations(long id) {
             return _hintoAIDomain.Recommendations(id); 
         }
+
+        [Route("recommendation/{id}")]
+        [HttpGet]
+        public IActionResult Ping() {
+            return Ok();
+        }
     }
 }
