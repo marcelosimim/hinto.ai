@@ -29,7 +29,7 @@ namespace Hinto.API.Controllers
             return _hintoAIDomain.Recommendations(id); 
         }
 
-        [Route("recommendation/{id}")]
+        [Route("ping")]
         [HttpGet]
         public IActionResult Ping() {
             return Ok();
