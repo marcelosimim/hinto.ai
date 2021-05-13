@@ -55,10 +55,14 @@ namespace Hinto.Entity
                     .HasMaxLength(75)
                     .IsUnicode(false)
                     .HasColumnName("profissao");
+
+
             });
 
             modelBuilder.Entity<Genero>(entity =>
             {
+                entity.HasKey(x => x.Id);
+
                 entity.ToTable("genero");
 
                 entity.HasIndex(e => e.Descricao, "UK_t52wxt385kqggv5pxlwqulmdg")
@@ -146,7 +150,7 @@ namespace Hinto.Entity
 
             modelBuilder.Entity<MidiaGenero>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.GenerosId, e.MidiaId });
 
                 entity.ToTable("midia_generos");
 
@@ -169,25 +173,27 @@ namespace Hinto.Entity
 
             modelBuilder.Entity<MidiaProdutore>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.ProdutoresId, e.MidiaId });
 
                 entity.ToTable("midia_produtores");
 
+                entity.Property(e => e.ProdutoresId).HasColumnName("produtores_id");
+                
                 entity.Property(e => e.MidiaId).HasColumnName("midia_id");
 
-                entity.Property(e => e.ProdutoresId).HasColumnName("produtores_id");
-
+                entity.HasOne(d => d.Produtores)
+                   .WithMany()
+                   .HasForeignKey(d => d.ProdutoresId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("FKoxe6un3shromfy0enovuxlt7f"); 
+                
                 entity.HasOne(d => d.Midia)
                     .WithMany()
                     .HasForeignKey(d => d.MidiaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKc12c4casnbjo88w7csr3s0vr5");
 
-                entity.HasOne(d => d.Produtores)
-                    .WithMany()
-                    .HasForeignKey(d => d.ProdutoresId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FKoxe6un3shromfy0enovuxlt7f");
+               
             });
 
             modelBuilder.Entity<Midium>(entity =>
@@ -219,6 +225,9 @@ namespace Hinto.Entity
                     .HasMaxLength(125)
                     .IsUnicode(false)
                     .HasColumnName("titulo");
+
+                
+
             });
 
             modelBuilder.Entity<Produtore>(entity =>

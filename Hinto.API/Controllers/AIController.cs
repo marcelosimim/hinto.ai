@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Hinto.API.VM;
 using Hinto.Domain.Contract;
-using Hinto.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Hinto.API.Controllers
 {
@@ -29,8 +25,8 @@ namespace Hinto.API.Controllers
 
         [Route("recommendation/{id}")]
         [HttpGet]
-        public AIRecommendationViewModel Recommendations(long id) {
-            return _mapper.Map<AIRecommendationViewModel>(_hintoAIDomain.Recommendations(id));
+        public object Recommendations(long id) {
+            return _hintoAIDomain.Recommendations(id); 
         }
     }
 }

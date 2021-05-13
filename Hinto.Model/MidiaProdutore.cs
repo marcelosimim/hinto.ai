@@ -10,7 +10,7 @@ namespace Hinto.Model
         public long MidiaId { get; set; }
         public long ProdutoresId { get; set; }
 
-        public virtual Midium Midia { get; set; }
-        public virtual Produtore Produtores { get; set; }
+        public  Produtore Produtores { get; set; }
+        public  Midium Midia { get; set; }
     }
 }
