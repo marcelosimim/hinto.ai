@@ -30,10 +30,28 @@ namespace Hinto.API.Controllers
             try
             {
                 var results = _hintoAIDomain.Recommendations(id);
-                return _hintoAIDomain.Recommendations(id);
+                return results;
             }
             catch (Exception ex) {
                 return new {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        [Route("top")]
+        [HttpGet]
+        public object Top() {
+            try
+            {
+                var results = _hintoAIDomain.Top();
+                return _hintoAIDomain.Top();
+            }
+            catch (Exception ex)
+            {
+                return new
+                {
                     Success = false,
                     Message = ex.Message
                 };

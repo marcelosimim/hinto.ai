@@ -6,5 +6,8 @@ namespace Hinto.Domain.Contract
     public interface IHintoAIDomain
     {
         List<MidiaVO> Recommendations(long idUsuario);
+
+        List<MidiaVO> Top();
+
     }
 }

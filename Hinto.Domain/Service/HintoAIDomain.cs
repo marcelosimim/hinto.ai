@@ -30,6 +30,11 @@ namespace Hinto.Domain.Service
             return IAProcessRecommend(usuario);
         }
 
+        public List<MidiaVO> Top()
+        {
+            return GetTopMidias();
+        }
+
         private List<MidiaVO> IAProcessRecommend(Usuario usuario)
         {
             //QUERY FINAL - buscar lista de interesses do usuario
@@ -180,7 +185,7 @@ namespace Hinto.Domain.Service
                 Sinopse = x.Sinopse,
                 Tipo = (TipoMidia)x.Tipo,
                 Titulo = x.Titulo
-            }) ;
+            });
 
             return midias.ToList();
         
@@ -297,5 +302,7 @@ namespace Hinto.Domain.Service
                 }
             };
         }
+
+        
     }
 }
