@@ -9,6 +9,7 @@ namespace Hinto.Model
     {
         public Usuario()
         {
+            ListaFavoritos = new HashSet<ListaFavorito>();
             ListaInteresses = new HashSet<ListaInteresse>();
         }
 
@@ -23,6 +24,7 @@ namespace Hinto.Model
         public int? Sexo { get; set; }
         public DateTime UltimoAcesso { get; set; }
 
+        public virtual ICollection<ListaFavorito> ListaFavoritos { get; set; }
         public virtual ICollection<ListaInteresse> ListaInteresses { get; set; }
     }
 }

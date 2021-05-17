@@ -148,7 +148,7 @@ namespace Hinto.Domain.Service
                 Afinidade = x.Afinidade,
                 DataLancamento = x.DataLancamento,
                 ImagemURL = x.ImagemUrl,
-                Tipo = x.Tipo,
+                Tipo = (TipoMidia)x.Tipo,
                 Titulo = x.Titulo,
                 Sinopse = x.Sinopse,
                 Generos = listaMidiaGeneros.Where(c => c.MidiaId == x.Id).Select(v => new GeneroVO { 
@@ -178,7 +178,7 @@ namespace Hinto.Domain.Service
                 DataLancamento = x.DataLancamento,
                 ImagemURL = x.ImagemUrl,
                 Sinopse = x.Sinopse,
-                Tipo = x.Tipo,
+                Tipo = (TipoMidia)x.Tipo,
                 Titulo = x.Titulo
             }) ;
 
