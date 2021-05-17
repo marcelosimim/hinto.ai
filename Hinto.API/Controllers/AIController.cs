@@ -3,6 +3,7 @@ using Hinto.API.VM;
 using Hinto.Domain.Contract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 
 namespace Hinto.API.Controllers
@@ -26,7 +27,17 @@ namespace Hinto.API.Controllers
         [Route("recommendation/{id}")]
         [HttpGet]
         public object Recommendations(long id) {
-            return _hintoAIDomain.Recommendations(id); 
+            try
+            {
+                var results = _hintoAIDomain.Recommendations(id);
+                return _hintoAIDomain.Recommendations(id);
+            }
+            catch (Exception ex) {
+                return new {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
         }
 
         [Route("ping")]
