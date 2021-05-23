@@ -34,7 +34,7 @@ namespace Hinto.Entity
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Server=ec2-35-174-35-242.compute-1.amazonaws.com;Port=5432;Database=d8rcl63s5og0bo;User ID=ftcjdcjvnezkys;Password=a3b99b2c98e4f36d4c06b93c1b6b51f92ed88cf0a2e0c362b85a30a6abbf57de;SSL Mode=Require;Trust Server Certificate=true");
+                optionsBuilder.UseNpgsql("Server=ec2-54-158-232-223.compute-1.amazonaws.com;Port=5432;Database=dcnf820rmr41i7;User ID=uqubqykirfgmbz;Password=5c36bb671ba136a414d7f80164b70c3b07a2b40c1e82dae1cd884e06c097bd69;SSL Mode=Require;Trust Server Certificate=true");
                 //optionsBuilder.UseNpgsql("Server=localhost;Database=hinto;User ID=hinto;Password=hinto");
             }
         }
